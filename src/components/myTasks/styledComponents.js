@@ -4,6 +4,7 @@ export const MainContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  min-height: 100vh;
 `
 
 export const CreateTaskDiv = styled.div`
@@ -76,6 +77,7 @@ export const FormBtn = styled.button`
   height: 40px;
   width: 125px;
   border-radius: 10px;
+  cursor: pointer;
 `
 
 export const AddTaskDiv = styled.div`

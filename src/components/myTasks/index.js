@@ -69,16 +69,18 @@ class Home extends Component {
   submitForm = event => {
     event.preventDefault()
     const {inputText, inputTag} = this.state
+    const FindItem = tagsList.find(each => each.optionId === inputTag)
     const newTask = {
       id: v4(),
       task: inputText,
       tag: inputTag,
+      displayText: FindItem.displayText,
     }
     if (inputText.length !== 0) {
       this.setState(prevState => ({
         taskList: [...prevState.taskList, newTask],
         inputText: '',
-        inputTag: '',
+        inputTag: tagsList[0].optionId,
       }))
     }
   }
@@ -130,24 +132,29 @@ class Home extends Component {
 
   renderTaskCard = () => {
     const {taskList, activeTag} = this.state
+
     const filterTaskList =
       activeTag === 'INITIAL'
         ? taskList
         : taskList.filter(each => each.tag === activeTag)
     return (
       <>
-        {filterTaskList.map(each => (
-          <TaskListLi key={each.id}>
-            <TaskText>{each.task}</TaskText>
-            <TaskTag>{each.tag}</TaskTag>
-          </TaskListLi>
-        ))}
+        {filterTaskList.length > 0 ? (
+          filterTaskList.map(each => (
+            <TaskListLi key={each.id}>
+              <TaskText>{each.task}</TaskText>
+              <TaskTag>{each.displayText}</TaskTag>
+            </TaskListLi>
+          ))
+        ) : (
+          <NoTaskText>No Tasks Added Yet</NoTaskText>
+        )}
       </>
     )
   }
 
   renderAddTaskView = () => {
-    const {taskList, activeTag} = this.state
+    const {activeTag} = this.state
 
     return (
       <AddTaskDiv>
@@ -170,13 +177,7 @@ class Home extends Component {
           })}
         </TagListUl>
         <MainHeading>Tasks</MainHeading>
-        <TaskUl>
-          {taskList.length === 0 ? (
-            <NoTaskText>No Tasks Added Yet</NoTaskText>
-          ) : (
-            this.renderTaskCard()
-          )}
-        </TaskUl>
+        <TaskUl>{this.renderTaskCard()}</TaskUl>
       </AddTaskDiv>
     )
   }
